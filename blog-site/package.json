@@ -6,11 +6,18 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "local:setup": "bash scripts/setup-local.sh"
+  },
+  "prisma": {
+    "seed": "tsx prisma/seed.ts"
   },
   "dependencies": {
+    "@prisma/client": "^5.21.1",
+    "bcryptjs": "^3.0.3",
     "lucide-react": "^0.554.0",
     "next": "16.0.4",
+    "prisma": "^5.21.1",
     "react": "19.2.0",
     "react-dom": "19.2.0"
   },
@@ -23,6 +30,7 @@
     "eslint": "^9",
     "eslint-config-next": "16.0.4",
     "tailwindcss": "^4",
+    "tsx": "^4.20.6",
     "typescript": "^5"
   }
 }
