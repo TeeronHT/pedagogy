@@ -137,7 +137,8 @@ export default function PostTable({
             ) : (
               filteredPosts.map((post) => {
                 const isAssignedToCurrentUser =
-                  currentUserName && post.authorName.toLowerCase() === currentUserName.toLowerCase();
+                  !!currentUserName &&
+                  post.authorName.toLowerCase() === currentUserName.toLowerCase();
                 return (
                   <tr
                     key={post.id}

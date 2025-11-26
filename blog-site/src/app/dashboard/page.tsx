@@ -1,7 +1,17 @@
-import { prisma } from "@/lib/prisma";
+import { getServerSession } from "next-auth";
+import { redirect } from "next/navigation";
+
 import PostTable from "@/components/dashboard/PostTable";
+import { authOptions } from "@/lib/auth";
+import { prisma } from "@/lib/prisma";
 
 export default async function DashboardPage() {
+  const session = await getServerSession(authOptions);
+
+  if (!session) {
+    redirect("/api/auth/signin?callbackUrl=/dashboard");
+  }
+
   const posts = await prisma.post.findMany({
     orderBy: { updatedAt: "desc" },
     include: {
@@ -33,8 +43,7 @@ export default async function DashboardPage() {
           placeholders for now.
         </p>
       </header>
-        {/* TODO: Replace hard-coded user with auth session once authentication is implemented */}
-        <PostTable posts={formattedPosts} currentUserName="Alice Johnson" />
+        <PostTable posts={formattedPosts} currentUserName={session.user?.name ?? ""} />
       </div>
     </main>
   );
