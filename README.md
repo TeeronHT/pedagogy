@@ -68,6 +68,17 @@ As we add services (e.g., infra scripts, Prisma schema), document them here.
 - **Preview the site:** `npm run dev` then visit `http://localhost:3000` to see the seeded posts rendered.
 - **Stop Docker when done:** `docker stop pedagogy-postgres` (and `docker rm pedagogy-postgres` if you want a clean slate next time).
 
+### API surface (read-only for now)
+
+- `GET /api/posts` – returns the same `GardenPost` payload rendered on the homepage (title, excerpt, hero image, tags, author info, publishedAt, readTime).
+- `GET /api/tags` – list of tags with post counts (useful for filters/trending sections).
+
+Both endpoints are unauthenticated, purely for read operations so the personal site or other consumers can fetch content without touching Prisma directly.
+
+### Contributor dashboard (work in progress)
+
+- `/dashboard` – server-rendered table showing every post’s title, status, author, and last updated timestamp. Edit/Delete buttons are present as disabled placeholders; we’ll wire them up after auth + mutations land. This is the foundation for the internal CMS experience.
+
 ---
 
 ## DIY Implementation Roadmap
