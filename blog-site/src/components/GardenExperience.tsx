@@ -1,6 +1,7 @@
-'use client';
+"use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import React, { useEffect, useRef } from "react";
 
 type GardenPost = {
@@ -8,6 +9,7 @@ type GardenPost = {
   title: string;
   excerpt: string;
   heroImageUrl: string;
+  slug: string;
   tags: string[];
   authorName: string;
   authorAvatar: string;
@@ -128,8 +130,6 @@ const pixelButtonClass =
 const pixelCardClass = "flex flex-col p-4 bg-yellow-50 border-4 border-gray-900 cursor-pointer";
 const pixelShadowClass =
   "shadow-[4px_4px_0_0_#1f2937] transition-all duration-150 ease-in-out hover:shadow-[8px_8px_0_0_#f97316] hover:-translate-x-1 hover:-translate-y-1";
-const retroTitleClass =
-  "text-3xl sm:text-4xl font-extrabold text-yellow-300 tracking-tighter retro-title";
 
 const GardenExperience: React.FC<Props> = ({ posts }) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -398,64 +398,20 @@ const GardenExperience: React.FC<Props> = ({ posts }) => {
     .slice(0, 8);
 
   return (
-    <>
-      <style>{`
-        body {
-          background-color: #fefefe;
-          background-image: radial-gradient(rgba(0,0,0,0.1) 1px, transparent 1px), radial-gradient(rgba(0,0,0,0.1) 1px, #fefefe 1px);
-          background-size: 20px 20px;
-          background-position: 0 0, 10px 10px;
-          font-family: var(--font-geist-sans), sans-serif;
-        }
-        .retro-title {
-          text-shadow: 3px 3px #f97316;
-          font-family: var(--font-press-start), cursive;
-        }
-        #garden-container {
-          border: 8px solid #388e3c;
-          box-shadow: 12px 12px 0 0 #2e7d32;
-        }
-        #pixelGardenCanvas {
-          image-rendering: pixelated;
-          width: 100%;
-          height: 100%;
-          display: block;
-        }
-      `}</style>
-
-      <nav className="border-b-4 border-gray-900 bg-green-700/80 sticky top-0 z-10 shadow-[0_4px_0_0_#1f2937]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 flex justify-between items-center">
-          <a href="#" className={retroTitleClass}>
-            DEVPLOTS
-          </a>
-          <div className="hidden md:flex space-x-6 text-sm font-bold text-yellow-100">
-            <a href="#" className="hover:text-orange-300 transition duration-100">
-              HOME
-            </a>
-            <a href="#" className="hover:text-orange-300 transition duration-100">
-              AUTHORS
-            </a>
-            <a href="#" className="hover:text-orange-300 transition duration-100">
-              ABOUT
-            </a>
-          </div>
-          <button className={`${pixelButtonClass} hidden sm:block`}>START PLOTTING</button>
-        </div>
-      </nav>
-
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
+    <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-12">
         <h1 className="text-4xl font-extrabold text-gray-900 mb-8 text-center retro-title">
           THE GARDENER&apos;S LOG
         </h1>
 
-        <div id="garden-container" className="relative w-full h-[300px] mb-8">
+        <div className="relative w-full h-[300px] mb-8 border-[8px] border-[#388e3c] shadow-[12px_12px_0_0_#2e7d32]">
           <canvas
             ref={canvasRef}
-            id="pixelGardenCanvas"
             onClick={handleCanvasInteraction}
             onTouchStart={handleCanvasInteraction}
             width="800"
             height="300"
+            style={{ imageRendering: "pixelated" }}
+            className="block w-full h-full"
           />
           <div className="absolute inset-0 flex items-start justify-end pointer-events-none p-3">
             <p className="text-white text-sm sm:text-base font-semibold bg-gray-900/60 px-2 py-1 border border-white/80 rounded text-right">
@@ -473,9 +429,11 @@ const GardenExperience: React.FC<Props> = ({ posts }) => {
                 </p>
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="columns-1 md:columns-2 gap-6 space-y-6">
                 {posts.map((post) => (
-                  <PostCard key={post.id} post={post} />
+                  <div key={post.id} className="break-inside-avoid">
+                    <PostCard post={post} />
+                  </div>
                 ))}
               </div>
             )}
@@ -534,79 +492,79 @@ const GardenExperience: React.FC<Props> = ({ posts }) => {
             </div>
           </aside>
         </div>
-      </main>
-
-      <footer className="bg-gray-900 mt-12 border-t-4 border-orange-600">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 text-center text-sm text-gray-400 font-mono">
-          SYSTEM FOOTER | &copy; {new Date().getFullYear()} DEVPLOTS. ALL RIGHTS RESERVED. (Pixelated Mock
-          Layout)
-        </div>
-      </footer>
-    </>
+    </main>
   );
 };
 
 const HeroPost = ({ post }: { post: GardenPost }) => (
-  <article className="relative w-full min-h-[320px] overflow-hidden rounded-2xl border-4 border-gray-900 shadow-[8px_8px_0_0_#1f2937]">
-    <div
-      className="absolute inset-0 bg-cover bg-center"
-      style={{ backgroundImage: `url(${post.heroImageUrl || DEFAULT_HERO_IMAGE})` }}
-      aria-hidden
-    />
-    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
-    <div className="relative p-8 text-white space-y-4">
-      <div className="flex flex-wrap gap-2">
+  <Link href={`/posts/${post.slug}`} className="block group focus:outline-none">
+    <article className="relative w-full min-h-[320px] overflow-hidden rounded-2xl border-4 border-gray-900 shadow-[8px_8px_0_0_#1f2937]">
+      <div
+        className="absolute inset-0 bg-cover bg-center"
+        style={{ backgroundImage: `url(${post.heroImageUrl || DEFAULT_HERO_IMAGE})` }}
+        aria-hidden
+      />
+      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
+      <div className="relative p-8 text-white space-y-4">
+        <div className="flex flex-wrap gap-2">
+          {post.tags.map((tag) => (
+            <span
+              key={tag}
+              className="inline-flex items-center rounded-full bg-orange-500/80 px-3 py-1 text-xs font-semibold"
+            >
+              {tag}
+            </span>
+          ))}
+        </div>
+        <h2 className="text-3xl md:text-4xl font-extrabold leading-tight group-hover:text-orange-200">
+          {post.title}
+        </h2>
+        <p className="text-base text-gray-200 line-clamp-3">{post.excerpt}</p>
+        <div className="flex flex-wrap items-center gap-4 text-sm text-gray-200">
+          <AuthorBadge name={post.authorName} avatar={post.authorAvatar} />
+          <span>{formatDate(post.publishedAt)}</span>
+          <span>{post.readTime}</span>
+        </div>
+      </div>
+    </article>
+  </Link>
+);
+
+const PostCard = ({ post }: { post: GardenPost }) => (
+  <Link href={`/posts/${post.slug}`} className="block group focus:outline-none">
+    <article className={`${pixelCardClass} ${pixelShadowClass}`}>
+      <div className="relative aspect-video mb-4 overflow-hidden">
+        <Image
+          src={post.heroImageUrl || DEFAULT_HERO_IMAGE}
+          alt={post.title}
+          fill
+          className="object-cover transition-transform duration-500 group-hover:scale-105"
+          sizes="(max-width: 768px) 100vw, 50vw"
+        />
+      </div>
+      <div className="flex flex-wrap gap-2 mb-3">
         {post.tags.map((tag) => (
           <span
-            key={tag}
-            className="inline-flex items-center rounded-full bg-orange-500/80 px-3 py-1 text-xs font-semibold"
+            key={`${post.id}-${tag}`}
+            className="inline-flex items-center rounded-full bg-orange-600 px-2 py-0.5 text-xs font-bold text-white uppercase tracking-wider border-b-2 border-r-2 border-orange-800"
           >
             {tag}
           </span>
         ))}
       </div>
-      <h2 className="text-3xl md:text-4xl font-extrabold leading-tight">{post.title}</h2>
-      <p className="text-base text-gray-200 line-clamp-3">{post.excerpt}</p>
-      <div className="flex flex-wrap items-center gap-4 text-sm text-gray-200">
+      <h3 className="text-xl font-extrabold leading-snug mb-2 text-gray-900 group-hover:text-orange-700">
+        {post.title}
+      </h3>
+      <p className="text-gray-700 text-sm mb-4 line-clamp-3 font-mono">{post.excerpt}</p>
+      <div className="mt-auto pt-3 border-t-2 border-gray-900/10 flex items-center justify-between text-xs">
         <AuthorBadge name={post.authorName} avatar={post.authorAvatar} />
-        <span>{formatDate(post.publishedAt)}</span>
-        <span>{post.readTime}</span>
+        <div className="flex items-center space-x-3 text-gray-600">
+          <span>{formatDate(post.publishedAt)}</span>
+          <span>{post.readTime}</span>
+        </div>
       </div>
-    </div>
-  </article>
-);
-
-const PostCard = ({ post }: { post: GardenPost }) => (
-  <article className={`${pixelCardClass} ${pixelShadowClass}`}>
-    <div className="relative aspect-video mb-4 overflow-hidden">
-      <Image
-        src={post.heroImageUrl || DEFAULT_HERO_IMAGE}
-        alt={post.title}
-        fill
-        className="object-cover transition-transform duration-500 group-hover:scale-105"
-        sizes="(max-width: 768px) 100vw, 50vw"
-      />
-    </div>
-    <div className="flex flex-wrap gap-2 mb-3">
-      {post.tags.map((tag) => (
-        <span
-          key={`${post.id}-${tag}`}
-          className="inline-flex items-center rounded-full bg-orange-600 px-2 py-0.5 text-xs font-bold text-white uppercase tracking-wider border-b-2 border-r-2 border-orange-800"
-        >
-          {tag}
-        </span>
-      ))}
-    </div>
-    <h3 className="text-xl font-extrabold leading-snug mb-2 text-gray-900">{post.title}</h3>
-    <p className="text-gray-700 text-sm mb-4 line-clamp-3 font-mono">{post.excerpt}</p>
-    <div className="mt-auto pt-3 border-t-2 border-gray-900/10 flex items-center justify-between text-xs">
-      <AuthorBadge name={post.authorName} avatar={post.authorAvatar} />
-      <div className="flex items-center space-x-3 text-gray-600">
-        <span>{formatDate(post.publishedAt)}</span>
-        <span>{post.readTime}</span>
-      </div>
-    </div>
-  </article>
+    </article>
+  </Link>
 );
 
 const AuthorBadge = ({ name, avatar }: { name: string; avatar: string }) => (

@@ -10,6 +10,7 @@ export const toGardenPost = (post: any): GardenPost => ({
   title: post.title,
   excerpt: post.excerpt ?? "",
   heroImageUrl: post.heroImageUrl ?? "",
+  slug: post.slug,
   tags: post.tags.map((tag: any) => tag.tag.name),
   authorName: post.author?.name ?? "Unknown Gardener",
   authorAvatar: post.author?.avatarUrl ?? "",

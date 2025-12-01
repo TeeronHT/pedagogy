@@ -10,7 +10,6 @@ async function resetDatabase() {
     prisma.post.deleteMany(),
     prisma.tag.deleteMany(),
     prisma.author.deleteMany(),
-    prisma.session.deleteMany(),
     prisma.user.deleteMany(),
   ]);
 }

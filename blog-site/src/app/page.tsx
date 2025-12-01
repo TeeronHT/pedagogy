@@ -1,4 +1,5 @@
 import GardenExperience from "@/components/GardenExperience";
+import PageChrome from "@/components/PageChrome";
 import { prisma } from "@/lib/prisma";
 import { toGardenPost } from "@/lib/postFormatter";
 
@@ -22,6 +23,7 @@ export default async function Home() {
             excerpt:
               "Stories bloom soon—this is placeholder content until the first post sprouts from the soil.",
             heroImageUrl: "",
+            slug: "the-garden-awaits",
             tags: ["Coming Soon"],
             authorName: "Pedagogy Collective",
             authorAvatar: "",
@@ -30,6 +32,10 @@ export default async function Home() {
           },
         ];
 
-  return <GardenExperience posts={gardenPosts} />;
+  return (
+    <PageChrome>
+      <GardenExperience posts={gardenPosts} />
+    </PageChrome>
+  );
 }
 
