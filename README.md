@@ -116,8 +116,8 @@ Both endpoints are unauthenticated, purely for read operations so the personal s
 - [ ] Enforce role-based policies inside each handler.
 
 ### 3. Authentication System
-- [x] Decide on session-based auth (NextAuth database sessions).
-- [x] Implement OAuth login via GitHub + Prisma adapter; persist sessions/tokens.
+- [x] Decide on session strategy (NextAuth JWT sessions for edge-friendly checks).
+- [x] Implement OAuth login via GitHub + Prisma adapter; persist users/accounts.
 - [x] Add middleware + server checks guarding `/dashboard`.
 - [ ] Ship auxiliary flows (custom credentials, forgot-password) if needed later.
 - [ ] Build sign-out + account management UI in the dashboard shell.
@@ -163,6 +163,8 @@ Both endpoints are unauthenticated, purely for read operations so the personal s
 - [ ] Upgrade Prisma to 7.x once driver adapter / Accelerate configuration is in place.
 
 ---
+
+- **Session tokens**: JWT cookies now carry user id + role. They’re signed (not encrypted) so don’t place sensitive data inside. Shorten `maxAge` or rotate `AUTH_SECRET` to revoke sessions quickly.
 
 ## Security posture & considerations
 
